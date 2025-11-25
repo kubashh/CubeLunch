@@ -3,11 +3,11 @@ import AdminPage from "./AdminPage"
 import { navigateToken } from "../lib/utilServer"
 
 export default async function Admin() {
-  await navigateToken(`admin`)
+  const role = await navigateToken(`admin`)
 
   return (
     <>
-      <Header logout />
+      <Header role={role} />
       <AdminPage />
     </>
   )

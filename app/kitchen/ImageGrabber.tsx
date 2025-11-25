@@ -5,7 +5,7 @@ import NextImage from "next/image"
 export default function ImageGrabber({ src, id }: ImageGrabberProps) {
   return (
     <div className="flex">
-      <label htmlFor={String(id)} className="mr-2 border-1 border-zinc-700 cursor-pointer">
+      <label htmlFor={String(id)} className="mr-2 border border-zinc-700 cursor-pointer">
         <NextImage width="40" height="40" src={src.value} alt="obraz" />
       </label>
       <input

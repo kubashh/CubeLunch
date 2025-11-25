@@ -3,11 +3,11 @@ import KitchenPage from "./KitchenPage"
 import { navigateToken } from "../lib/utilServer"
 
 export default async function Kitchen() {
-  await navigateToken(`kitchen`)
+  const role = await navigateToken(`kitchen`)
 
   return (
     <>
-      <Header logout />
+      <Header role={role} />
       <KitchenPage />
     </>
   )

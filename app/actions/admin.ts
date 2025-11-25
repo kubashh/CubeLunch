@@ -2,11 +2,11 @@
 
 import { users } from "@/db/db"
 
-export async function changeUserRule(id: number, newRule: number) {
+export async function changeUserRole(id: number, newRole: number) {
   const user = users.getById(id)
   if (!user) return
 
-  user.rule = newRule
+  user.role = newRole
   users.createById(id, user)
 }
 

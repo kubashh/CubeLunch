@@ -2,24 +2,27 @@ import { redirect } from "next/navigation"
 import { CHARSET, CODE_ADMIN, CODE_COOK, CODE_USER } from "./consts"
 
 export function randChar(n = 1) {
-  let str = ``
-  for (let i = 0; i < n; i++) str += CHARSET.at(Math.floor(Math.random() * CHARSET.length))
-  return str
+  const buf = []
+  for (let i = 0; i < n; i++) buf.push(CHARSET.at(Math.floor(Math.random() * CHARSET.length)))
+  return buf.join(``)
 }
 
-export function navigate(url: UrlType, curentUrl: UrlType) {
-  if (curentUrl !== url) redirect(url)
-}
-
-export function navigateByRule(rule: number, currentUrl: UrlType) {
-  switch (rule) {
+export function navigateByRole(role: number, currentUrl: TUrl) {
+  switch (role) {
     case CODE_USER:
-      return navigate(`store`, currentUrl)
+      if ([`register`, `login`, `kitchen`, `admin`].includes(currentUrl)) navigate(`store`, currentUrl)
+      break
     case CODE_COOK:
-      return navigate(`kitchen`, currentUrl)
+      if ([`register`, `login`, `admin`].includes(currentUrl)) navigate(`kitchen`, currentUrl)
+      break
     case CODE_ADMIN:
-      return navigate(`admin`, currentUrl)
+      if ([`register`, `login`].includes(currentUrl)) navigate(`admin`, currentUrl)
+      break
     default:
-      return navigate(`/`, currentUrl)
+      return navigate(`register`, currentUrl)
   }
+}
+
+function navigate(url: TUrl, curentUrl: TUrl) {
+  if (curentUrl !== url) redirect(url)
 }

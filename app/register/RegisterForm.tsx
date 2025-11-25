@@ -13,7 +13,7 @@ async function registerAction(formData: FormData) {
 
   const res = await register(data)
 
-  if (res) return alert(res)
+  if (res) return alert(res.message)
 
   redirect(`login`)
 }

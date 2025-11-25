@@ -8,7 +8,7 @@ export default async function Cart() {
 
   return (
     <>
-      <Header store logout />
+      <Header role={0} />
       <div>
         {/* {products.map(([p, n]) => (
           <div key={p.id}>

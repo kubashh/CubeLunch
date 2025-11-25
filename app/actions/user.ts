@@ -1,38 +1,58 @@
 "use server"
 
+import { z } from "zod"
 import { users } from "@/db/db"
-import { genToken, getTokenAndRule, getUserFromCookies } from "../lib/utilServer"
+import { genToken, getTokenAndRole, getUserFromCookies } from "../lib/utilServer"
 
-export async function token(
-  data: TokenProps
-): Promise<{ message?: string; rule?: number; token?: string }> {
-  if (data.name.length < 4 || data.password.length < 4) return { message: `Złe dane` }
+const zName = z
+  .string()
+  .min(4, `Name must contain minimum 4 characters`)
+  .max(32, `Name can have max 32 characters`)
 
-  const res = getTokenAndRule(data.name, data.password)
+const zEmail = z
+  .string()
+  .min(4, `Email must contain minimum 4 characters`)
+  .max(32, `Email can have max 32 characters`)
+
+const zPassword = z
+  .string()
+  .min(4, `Email must contain minimum 4 characters`)
+  .max(32, `Email can have max 32 characters`)
+
+const NewUser = z.object({
+  name: zName,
+  email: zEmail,
+  password: zPassword,
+})
+
+const TokenProps = z.object({
+  name: zName,
+  password: zPassword,
+})
+
+export async function token(data: unknown): Promise<{ message?: string; role?: number; token?: string }> {
+  const tokenProps = TokenProps.safeParse(data)
+  if (!tokenProps.success) return { message: tokenProps.error.message }
+
+  const res = getTokenAndRole(tokenProps.data.name, tokenProps.data.password)
   if (!res) return { message: `Nie udało się zalogować, spróbuj ponownie.` }
 
   return res
 }
 
-function isUserValid(user: RegisterProps) {
-  if (user.name.length < 4) return false
-  if (user.password.length < 4) return false
-  if (user.email.length < 4) return false
-  return true
-}
+export async function register(data: unknown) {
+  const newUser = NewUser.safeParse(data)
+  if (!newUser.success) return { message: newUser.error.message }
 
-export async function register(data: RegisterProps) {
-  if (!isUserValid(data)) return { message: `Złe dane!` }
-
-  if (users.get(`name`, data.name)) return { message: `Użytkownik o takim imieniu już istnieje!` }
+  if (users.get(`name`, newUser.data.name)) return { message: `Użytkownik o takim imieniu już istnieje!` }
 
   users.create({
     id: 0,
-    name: data.name,
-    passwordHash: await Bun.password.hash(data.password),
-    email: data.email,
+    name: newUser.data.name,
+    passwordHash: await Bun.password.hash(newUser.data.password),
+    email: newUser.data.email,
     token: genToken(),
-    rule: 1,
+    role: 1,
     cart: {},
     items: {},
   })

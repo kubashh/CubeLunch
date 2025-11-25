@@ -3,11 +3,11 @@ import LoginForm from "./LoginForm"
 import { navigateToken } from "../lib/utilServer"
 
 export default async function Login() {
-  await navigateToken(`login`)
+  const role = await navigateToken(`login`)
 
   return (
     <>
-      <Header menu />
+      <Header role={role} />
 
       <main className="w-fit mx-auto">
         <LoginForm />

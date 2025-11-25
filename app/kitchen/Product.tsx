@@ -33,7 +33,7 @@ export default function Product(p: Product) {
   const src = useSignal(p.img)
   return (
     <form
-      className="mb-[4px] border-t-3 border-zinc-900 p-2 grid grid-cols-5"
+      className="mb-1 border-t-3 border-zinc-900 p-2 grid grid-cols-5"
       action={editProductAction({ ...p, img: src.value })}
     >
       <input className="mr-2" name="name" defaultValue={p.name} />

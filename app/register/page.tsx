@@ -3,11 +3,11 @@ import RegisterForm from "./RegisterForm"
 import { navigateToken } from "../lib/utilServer"
 
 export default async function Register() {
-  await navigateToken(`register`)
+  const role = await navigateToken(`register`)
 
   return (
     <>
-      <Header menu />
+      <Header role={role} />
 
       <main className="w-fit mx-auto">
         <RegisterForm />

@@ -10,15 +10,17 @@ function HeaderLink({ label, url }: HeaderLinkProps) {
   )
 }
 
-export default function Header({ store, cart, logout, menu }: HeaderProps) {
+export default function Header({ role }: HeaderProps) {
   return (
     <header className="w-screen h-10">
       <Logo />
 
-      {logout && <Logout />}
-      {menu && <HeaderLink url="/" label="Menu" />}
-      {cart && <HeaderLink url="cart" label="Koszyk" />}
-      {store && <HeaderLink url="store" label="Sklep" />}
+      {role! > 0 ? <Logout /> : null}
+      {role === 0 ? <HeaderLink url="/" label="Menu" /> : null}
+      {role! > 0 ? <HeaderLink url="cart" label="Koszyk" /> : null}
+      {role! > 0 ? <HeaderLink url="store" label="Sklep" /> : null}
+      {role! > 1 ? <HeaderLink url="kitchen" label="Kuchnia" /> : null}
+      {role! > 2 ? <HeaderLink url="admin" label="Admin" /> : null}
     </header>
   )
 }
